@@ -1,0 +1,325 @@
+1.
+
+class Sudoku:
+    
+    def __init__(self, string):
+        self.board = []
+        index = 0
+        counter = 0
+        for i in range(9):
+            self.board.append([])
+            for j in range(9):
+                self.board[index].append(int(string[counter]))
+                counter += 1
+            index += 1
+        
+    def get_row(self, row_num):
+        return self.board[row_num]
+    
+    def get_col(self, col_num):
+        return [self.board[row][col_num] for row in range(9)]
+    
+    def get_sqr(self, n, *m):
+        start_row = (n // 3) * 3
+        if m:
+            start_col = (m[0] // 3) * 3
+        else:
+            start_col = 3
+        
+        returned_list = list()
+        for row in range(start_row, start_row + 3):
+            for col in range(start_col, start_col + 3):
+                returned_list.append(self.board[row][col])
+        return returned_list
+        
+game = Sudoku("417950030000000700060007000050009106800600000000003400900005000000430000200701580")
+print(game.get_row(0))
+print()
+print(game.get_col(8))
+print()
+print(game.get_sqr(1))
+print()
+print(game.get_sqr(1, 8))
+print()
+print(game.get_sqr(8,3))
+
+
+2.
+
+
+class ListNode:
+    
+    def __init__(self, val = 0, next_val = None):
+        self.val = val
+        self.next = next_val
+    
+    def add_data(self, lis):
+        for i in lis:
+            current_node = ListNode(i)
+            current_node.next = None
+            self.next = current_node
+            self = self.next
+        
+            
+    def get_data(self):
+        current_node = self
+        returned_list = list()
+        while current_node != None:
+            returned_list.append(current_node.val)
+            current_node = current_node.next
+        return returned_list
+
+def add_two_numbers(lis1, lis2):
+    str1, str2 = '',''
+    while lis1 != None:
+        str1 += str(lis1.val)
+        lis1 = lis1.next
+        
+    while lis2 != None:
+        str2 += str(lis2.val)
+        lis2 = lis2.next
+    
+    str_result = str(int(str1) + int(str2))
+    returned_list = ListNode(int(str_result[-1]))
+    if len(str_result) > 1:
+        returned_list.add_data(list(map(int, str_result[::-1][1:])))
+    return returned_list
+
+lt1 = ListNode(2)
+lt1.add_data([4, 3])
+lt2 = ListNode(5)
+lt2.add_data([6, 4])
+print(lt1.get_data())
+print(lt2.get_data())
+print(add_two_numbers(lt1, lt2).get_data())
+print()
+lt1 = ListNode(0)
+lt2 = ListNode(0)
+print(lt1.get_data())
+print(lt2.get_data()) 
+print(add_two_numbers(lt1, lt2).get_data())
+print()
+
+lt1 = ListNode(9)
+lt1.add_data([9,9,9,9,9,9])
+lt2 = ListNode(9)
+lt2.add_data([9,9,9])
+print(lt1.get_data())   
+print(lt2.get_data())   
+
+print(add_two_numbers(lt1, lt2).get_data())
+
+
+3.
+
+
+class CoffeeShop:
+    def __init__(self):
+        self.name = 'The Coffee Shop'
+        self.menu = [
+            {
+                'name' : 'Iced Coffee',
+                'type' : 'drink',
+                'price' : 1.02
+            },
+                        {
+                'name' : 'Lemonade',
+                'type' : 'drink',
+                'price' : 4.8
+            },
+                        {
+                'name' : 'Orange Juice',
+                'type' : 'drink',
+                'price' : 1.8
+            },
+                        {
+                'name' : 'Pineapple Juice',
+                'type' : 'drink',
+                'price' : 3.5
+            },
+                        {
+                'name' : 'Hot Chocolate',
+                'type' : 'drink',
+                'price' : 2.9
+            },
+                        {
+                'name' : 'Tuna Sandwich',
+                'type' : 'food',
+                'price' : 10.03
+            },
+                        {
+                'name' : 'Ham and Cheese Sandwich',
+                'type' : 'food',
+                'price' : 9.7
+            },
+                        {
+                'name' : 'Bacon and Egg',
+                'type' : 'food',
+                'price' : 9.9
+            },
+                        {
+                'name' : 'Steak',
+                'type' : 'food',
+                'price' : 6.78
+            },
+                        {
+                'name' : 'Hamburger',
+                'type' : 'food',
+                'price' : 13.25
+            },
+                        {
+                'name' : 'Cinnamon Roll',
+                'type' : 'food',
+                'price' : 12.28
+            }
+        ]
+        
+        self.orders = []
+    
+    def add_order(self, item):
+        for i in self.menu:
+            if item.lower() == i['name'].lower():
+                self.orders.append(i)
+        if not len(self.orders):
+            return 'This item is currently unavailable!'
+        else:
+            return 'Order added!'
+        
+    def list_orders(self):
+        return [item['name'] for item in self.orders]            
+        
+    def due_amount(self):
+        amount = 0
+        for item in self.orders:
+            amount += item['price']
+        return round(amount,3)
+    
+    def fullfill_order(self):
+        if not len(self.orders):
+            return 'All orders have been fulfilled!'
+        return 'The ' + self.orders.pop(0)['name'] + ' is ready!'
+    
+    def cheapest_item(self):
+        price = float('inf')
+        cheapest_name = ''
+        for item in self.menu:
+            if item['price'] < price:
+                price = item['price']
+                cheapest_name = item['name']
+        return cheapest_name
+    
+    def drinks_only(self):
+        return [item['name'] for item in self.menu if item['type'] == 'drink']
+    
+    def foods_only(self):
+        return [item['name'] for item in self.menu if item['type'] == 'food']
+
+
+4.
+
+
+from math import floor, sqrt
+def find_prev_prime(num):
+    counter = 2
+    while counter != num:
+        if not num % counter:
+            num -= 1
+            counter = 2
+        else:
+            counter += 1
+    return num
+
+def find_next_prime(num):
+    counter = 2
+    while counter < floor(sqrt(num)) + 1:
+        if not num % counter:
+            num += 1
+            counter = 2
+        else:
+            counter += 1
+    return num
+
+def loneliest_number(lower, upper):
+    returned_dict = {
+        'number' : 0,
+        'distance' : None,
+        'closest' : None
+    }
+    
+    if lower > 1:
+        prev_prime = find_prev_prime(lower - 1)
+        next_prime = find_next_prime(lower + 1)
+    else:
+        prev_prime = 2
+        next_prime = 3
+
+    temp_prime = None
+    for i in range(lower, upper + 1):
+        
+        if next_prime == i:
+            temp_prime = next_prime
+            next_prime = find_next_prime(i + 1)
+        
+        distance = min(abs(i - prev_prime) , abs(i - next_prime))
+
+        if returned_dict['distance'] == None:
+            returned_dict['distance'] = distance
+            returned_dict['number'] = i
+            if abs(i - prev_prime) > abs(i - next_prime):
+                returned_dict['closest'] = next_prime
+            else:
+                returned_dict['closest'] = prev_prime
+                
+            
+        else:
+            if distance > returned_dict['distance']:
+                returned_dict['distance'] = distance
+                returned_dict['number'] = i
+                if abs(i - prev_prime) >= abs(i - next_prime):
+                    returned_dict['closest'] = next_prime
+                else:
+                    returned_dict['closest'] = prev_prime        
+        
+        if temp_prime == i:
+            prev_prime = temp_prime
+        
+    return returned_dict
+    
+print(loneliest_number(0, 22))
+print(loneliest_number(8, 123))
+print(loneliest_number(938, 1190))
+print(loneliest_number(120, 1190))
+
+
+5.
+
+
+class Selfie:
+    
+    def __init__(self):
+        self.state = []
+    
+    def save_state(self):
+        self.state.append(self.x)
+    
+    def recover_state(self, index):
+        self.x = self.state[index]
+        return self
+        
+p = Selfie()
+p.x = 2
+print(p.x)
+p.save_state()
+
+p.x = 5
+p.save_state()
+p = p.recover_state(0)
+print(p.x)
+
+p.x = 7
+p.save_state()
+p.x = 11
+p.save_state()
+
+p.recover_state(2)
+print(p.x)
